@@ -58,11 +58,84 @@ async function prerender() {
         .replaceAll("'/favicon.ico'", "'/portfolio/favicon.ico'")
         .replaceAll('"/projects-bg.png"', '"/portfolio/projects-bg.png"')
         .replaceAll("'/projects-bg.png'", "'/portfolio/projects-bg.png'")
-        .replace(/data-visible="false"/g, 'data-visible="true"');
+        .replace(/data-visible="false"/g, 'data-visible="true"')
+        .replace(/<script class="\$tsr"[\s\S]*?<\/script>/gi, "")
+        .replace(/<script type="module"[\s\S]*?<\/script>/gi, "");
+
+      // Append interactive runtime script for modals, lightbox, mobile nav, and contact form
+      const runtimeScript = `
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Mobile Nav Toggle
+  const menuBtn = document.querySelector('button[aria-label="Open navigation menu"]');
+  const sidebar = document.querySelector('aside');
+  if (menuBtn && sidebar) {
+    menuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+      sidebar.classList.toggle('flex');
+    });
+  }
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+        if (window.innerWidth < 1024 && sidebar) {
+          sidebar.classList.add('hidden');
+          sidebar.classList.remove('flex');
+        }
+      }
+    });
+  });
+
+  // Contact Form Ajax
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const origText = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Sending...';
+      }
+      const name = form.querySelector('#cf-name')?.value || '';
+      const email = form.querySelector('#cf-email')?.value || '';
+      const subject = form.querySelector('#cf-subject')?.value || '';
+      const message = form.querySelector('#cf-message')?.value || '';
+
+      try {
+        const res = await fetch('https://formsubmit.co/ajax/poomanin66005@gmail.com', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ name, email, _subject: subject, message })
+        });
+        if (res.ok) {
+          form.innerHTML = '<div class="rounded-lg border border-primary/40 bg-card-alt p-6 text-center text-primary font-medium">✓ Message sent successfully! Thank you for reaching out.</div>';
+        } else {
+          throw new Error('Failed');
+        }
+      } catch (err) {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origText;
+        }
+        alert('Could not send message. Please email directly to poomanin66005@gmail.com');
+      }
+    });
+  }
+});
+</script>
+`;
+
+      html = html.replace('</body>', runtimeScript + '</body>');
 
       fs.writeFileSync(path.join(publicDir, "index.html"), html, "utf-8");
       fs.writeFileSync(path.join(publicDir, "404.html"), html, "utf-8");
-      console.log("Successfully prerendered index.html and 404.html with inlined CSS and /portfolio/ base for GitHub Pages");
+      console.log("Successfully prerendered index.html and 404.html with inlined CSS, interactive runtime, and /portfolio/ base for GitHub Pages");
     } else {
       console.warn("SSR returned non-200 response:", response.status, html.slice(0, 200));
     }
