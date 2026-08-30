@@ -33,28 +33,36 @@ async function prerender() {
     let html = await response.text();
 
     if (response.status === 200 && html && html.includes("<html")) {
-      // Normalize all root-relative paths to relative paths for GitHub Pages (/portfolio/ subpath)
+      // Find compiled CSS to inline for guaranteed instant styling
+      const assetsDir = path.join(publicDir, "assets");
+      let inlineCss = "";
+      if (fs.existsSync(assetsDir)) {
+        const cssFiles = fs.readdirSync(assetsDir).filter((f) => f.endsWith(".css"));
+        for (const cssFile of cssFiles) {
+          inlineCss += fs.readFileSync(path.join(assetsDir, cssFile), "utf-8") + "\n";
+        }
+      }
+
+      // Normalize all root-relative paths to /portfolio/ base for GitHub Pages
       html = html
-        .replace(/<head>/i, '<head><base href="./" />')
-        .replaceAll('"/assets/', '"./assets/')
-        .replaceAll("'/assets/", "'./assets/")
-        .replaceAll('"/logos/', '"./logos/')
-        .replaceAll("'/logos/", "'./logos/")
-        .replaceAll('"/projects/', '"./projects/')
-        .replaceAll("'/projects/", "'./projects/")
-        .replaceAll('"/certificates/', '"./certificates/')
-        .replaceAll("'/certificates/", "'./certificates/")
-        .replaceAll('"/profile-photo.', '"./profile-photo.')
-        .replaceAll("'/profile-photo.", "'./profile-photo.")
-        .replaceAll('"/favicon.ico"', '"./favicon.ico"')
-        .replaceAll("'/favicon.ico'", "'./favicon.ico'")
-        .replaceAll('"/projects-bg.png"', '"./projects-bg.png"')
-        .replaceAll("'/projects-bg.png'", "'./projects-bg.png'")
+        .replace(/<head>/i, `<head><base href="/portfolio/" />${inlineCss ? `<style id="inlined-styles">${inlineCss}</style>` : ""}`)
+        .replaceAll('"/assets/', '"/portfolio/assets/')
+        .replaceAll("'/assets/", "'/portfolio/assets/")
+        .replaceAll('"/logos/', '"/portfolio/logos/')
+        .replaceAll("'/logos/", "'/portfolio/logos/")
+        .replaceAll('"/projects/', '"/portfolio/projects/')
+        .replaceAll("'/projects/", "'/portfolio/projects/")
+        .replaceAll('"/certificates/', '"/portfolio/certificates/')
+        .replaceAll("'/certificates/", "'/portfolio/certificates/")
+        .replaceAll('"/favicon.ico"', '"/portfolio/favicon.ico"')
+        .replaceAll("'/favicon.ico'", "'/portfolio/favicon.ico'")
+        .replaceAll('"/projects-bg.png"', '"/portfolio/projects-bg.png"')
+        .replaceAll("'/projects-bg.png'", "'/portfolio/projects-bg.png'")
         .replace(/data-visible="false"/g, 'data-visible="true"');
 
       fs.writeFileSync(path.join(publicDir, "index.html"), html, "utf-8");
       fs.writeFileSync(path.join(publicDir, "404.html"), html, "utf-8");
-      console.log("Successfully prerendered index.html and 404.html with relative asset paths for GitHub Pages");
+      console.log("Successfully prerendered index.html and 404.html with inlined CSS and /portfolio/ base for GitHub Pages");
     } else {
       console.warn("SSR returned non-200 response:", response.status, html.slice(0, 200));
     }
