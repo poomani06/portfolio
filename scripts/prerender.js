@@ -47,6 +47,7 @@ async function prerender() {
         .replace(/src="\/projects\//g, 'src="./projects/')
         .replace(/src="\/certificates\//g, 'src="./certificates/')
         .replace(/src="\/profile-photo\./g, 'src="./profile-photo.')
+        .replace(/data-visible="false"/g, 'data-visible="true"')
         .replace(/url\('\/projects-bg\.png'\)/g, "url('./projects-bg.png')")
         .replace(/url\('\/projects\//g, "url('./projects/")
         .replace(/url\("\/projects\//g, 'url("./projects/');
