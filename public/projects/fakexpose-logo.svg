@@ -1,0 +1,12 @@
+<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="24" fill="#0f172a"/>
+  <rect x="2" y="2" width="116" height="116" rx="22" stroke="url(#blue_grad)" stroke-width="2"/>
+  <path d="M60 22C43 28 34 32 34 52C34 78 48 94 60 98C72 94 86 78 86 52C86 32 77 28 60 22Z" fill="#2563eb" fill-opacity="0.2" stroke="#3b82f6" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M48 58L56 66L72 48" stroke="#60a5fa" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="blue_grad" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+</svg>

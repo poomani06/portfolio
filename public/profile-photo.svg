@@ -1,0 +1,7 @@
+<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" rx="100" fill="#0b1329"/>
+  <circle cx="100" cy="100" r="96" stroke="#00f2fe" stroke-width="3" stroke-dasharray="6 6"/>
+  <circle cx="100" cy="75" r="34" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+  <path d="M40 170C40 135 68 125 100 125C132 125 160 135 160 170" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+  <text x="100" y="83" font-family="system-ui, sans-serif" font-size="24" font-weight="bold" fill="#00f2fe" text-anchor="middle">PN</text>
+</svg>
