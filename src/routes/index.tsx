@@ -173,20 +173,11 @@ function Portfolio() {
                     className="ripple-ring absolute inset-0 rounded-full border border-secondary/50 [animation-delay:1.2s]"
                     aria-hidden="true"
                   />
-                  {profilePhoto ? (
-                    <img
-                      src={profilePhoto}
-                      alt={`Portrait of ${profile.name}, cybersecurity student`}
-                      className="size-36 rounded-full border-2 border-primary/60 object-cover shadow-[var(--glow-primary)] sm:size-40"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = "/profile-photo.svg";
-                      }}
-                    />
-                  ) : (
-                    <span className="grid size-36 place-items-center rounded-full border-2 border-primary/60 bg-card-alt text-4xl font-bold neon-text shadow-[var(--glow-primary)] sm:size-40">
-                      PN
-                    </span>
-                  )}
+                  <img
+                    src={profilePhoto || "/profile-photo.jpg"}
+                    alt={`Portrait of ${profile.name}, cybersecurity student`}
+                    className="size-36 rounded-full border-2 border-primary/60 object-cover shadow-[var(--glow-primary)] sm:size-40"
+                  />
                 </div>
 
                 <h2 className="mt-6 text-[2rem] font-semibold tracking-[-0.04em]">Security Focus</h2>
