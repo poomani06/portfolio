@@ -58,7 +58,10 @@ async function prerender() {
         .replaceAll("'/favicon.ico'", "'/portfolio/favicon.ico'")
         .replaceAll('"/projects-bg.png"', '"/portfolio/projects-bg.png"')
         .replaceAll("'/projects-bg.png'", "'/portfolio/projects-bg.png'")
+        .replaceAll('"/favicon.svg"', '"/portfolio/favicon.svg"')
+        .replaceAll("'/favicon.svg'", "'/portfolio/favicon.svg'")
         .replace(/data-visible="false"/g, 'data-visible="true"')
+        .replace(/<lovable-tag[\s\S]*?<\/lovable-tag>/gi, "")
         .replace(/<script class="\$tsr"[\s\S]*?<\/script>/gi, "")
         .replace(/<script type="module"[\s\S]*?<\/script>/gi, "");
 

@@ -173,6 +173,19 @@
   }
 }
 
+/* Remove any third-party or lovable badges */
+[class*="lovable"],
+[id*="lovable"],
+[class*="gptengineer"],
+[id*="gptengineer"],
+lovable-tag,
+div[style*="z-index: 999999"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 @keyframes ripple-out {
   0% {
     transform: scale(0.9);
