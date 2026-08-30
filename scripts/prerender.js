@@ -33,24 +33,24 @@ async function prerender() {
     let html = await response.text();
 
     if (response.status === 200 && html && html.includes("<html")) {
-      // Normalize root-relative paths to relative paths for GitHub Pages (/portfolio/ subpath)
+      // Normalize all root-relative paths to relative paths for GitHub Pages (/portfolio/ subpath)
       html = html
         .replace(/<head>/i, '<head><base href="./" />')
-        .replace(/href="\/assets\//g, 'href="./assets/')
-        .replace(/href="\/logos\//g, 'href="./logos/')
-        .replace(/href="\/projects\//g, 'href="./projects/')
-        .replace(/href="\/certificates\//g, 'href="./certificates/')
-        .replace(/href="\/profile-photo\./g, 'href="./profile-photo.')
-        .replace(/href="\/favicon\.ico"/g, 'href="./favicon.ico"')
-        .replace(/src="\/assets\//g, 'src="./assets/')
-        .replace(/src="\/logos\//g, 'src="./logos/')
-        .replace(/src="\/projects\//g, 'src="./projects/')
-        .replace(/src="\/certificates\//g, 'src="./certificates/')
-        .replace(/src="\/profile-photo\./g, 'src="./profile-photo.')
-        .replace(/data-visible="false"/g, 'data-visible="true"')
-        .replace(/url\('\/projects-bg\.png'\)/g, "url('./projects-bg.png')")
-        .replace(/url\('\/projects\//g, "url('./projects/")
-        .replace(/url\("\/projects\//g, 'url("./projects/');
+        .replaceAll('"/assets/', '"./assets/')
+        .replaceAll("'/assets/", "'./assets/")
+        .replaceAll('"/logos/', '"./logos/')
+        .replaceAll("'/logos/", "'./logos/")
+        .replaceAll('"/projects/', '"./projects/')
+        .replaceAll("'/projects/", "'./projects/")
+        .replaceAll('"/certificates/', '"./certificates/')
+        .replaceAll("'/certificates/", "'./certificates/")
+        .replaceAll('"/profile-photo.', '"./profile-photo.')
+        .replaceAll("'/profile-photo.", "'./profile-photo.")
+        .replaceAll('"/favicon.ico"', '"./favicon.ico"')
+        .replaceAll("'/favicon.ico'", "'./favicon.ico'")
+        .replaceAll('"/projects-bg.png"', '"./projects-bg.png"')
+        .replaceAll("'/projects-bg.png'", "'./projects-bg.png'")
+        .replace(/data-visible="false"/g, 'data-visible="true"');
 
       fs.writeFileSync(path.join(publicDir, "index.html"), html, "utf-8");
       fs.writeFileSync(path.join(publicDir, "404.html"), html, "utf-8");
