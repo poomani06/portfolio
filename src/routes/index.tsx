@@ -29,6 +29,7 @@ import {
   profilePhoto,
   project,
   securityKnowledge,
+  skillDetails,
   skillGroups,
   tools,
 } from "@/components/portfolio/data";
@@ -42,7 +43,10 @@ export const Route = createFileRoute("/")({
         content:
           "Portfolio of Poomani N, B.E. Cybersecurity student in Madurai with internship experience in vulnerability scanning, security assessment, and security reporting.",
       },
-      { property: "og:title", content: "Poomani N — Cybersecurity Student Portfolio" },
+      {
+        property: "og:title",
+        content: "Poomani N — Cybersecurity Student Portfolio",
+      },
       {
         property: "og:description",
         content:
@@ -69,13 +73,17 @@ function SectionHeading({
   return (
     <div className="mb-10 max-w-2xl">
       {eyebrow && (
-        <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-secondary">{eyebrow}</p>
+        <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-secondary">
+          {eyebrow}
+        </p>
       )}
       <h2 id={id} className="text-3xl font-bold sm:text-4xl">
         {title}
       </h2>
       <div className="mt-3 h-0.5 w-16 rounded-full bg-[image:var(--gradient-neon)]" />
-      {description && <p className="mt-4 text-muted-foreground">{description}</p>}
+      {description && (
+        <p className="mt-4 text-muted-foreground">{description}</p>
+      )}
     </div>
   );
 }
@@ -90,13 +98,40 @@ function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={`mx-auto max-w-6xl px-4 py-20 sm:px-6 ${className}`}>
+    <section
+      id={id}
+      className={`mx-auto max-w-6xl px-4 py-20 sm:px-6 ${className}`}
+    >
       {children}
     </section>
   );
 }
 
-function Tag({ children }: { children: React.ReactNode }) {
+function Tag({
+  children,
+  onClick,
+  clickable = false,
+  "data-skill-name": dataSkillName,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  clickable?: boolean;
+  "data-skill-name"?: string;
+}) {
+  if (clickable || onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        data-skill-name={
+          dataSkillName || (typeof children === "string" ? children : undefined)
+        }
+        className="cursor-pointer rounded-full border border-secondary/40 bg-card-alt px-3 py-1 text-sm text-foreground transition-all hover:border-primary hover:bg-card-alt/80 hover:text-primary"
+      >
+        {children}
+      </button>
+    );
+  }
   return (
     <span className="rounded-full border border-secondary/30 bg-card-alt px-3 py-1 text-sm text-foreground">
       {children}
@@ -114,10 +149,14 @@ function Portfolio() {
   const [expOpen, setExpOpen] = useState<number | null>(null);
   const [eduOpen, setEduOpen] = useState<number | null>(null);
   const [certOpen, setCertOpen] = useState<number | null>(null);
+  const [skillOpen, setSkillOpen] = useState<string | null>(null);
 
   const certImages = certifications
     .filter((c) => c.image)
-    .map((c) => ({ src: c.image as string, alt: `${c.name} certificate from ${c.issuer}` }));
+    .map((c) => ({
+      src: c.image as string,
+      alt: `${c.name} certificate from ${c.issuer}`,
+    }));
 
   return (
     <div className="min-h-screen bg-background">
@@ -125,12 +164,19 @@ function Portfolio() {
 
       <main className="lg:pl-[260px]">
         {/* HERO */}
-        <section id="home" className="relative overflow-hidden pt-12 pb-16 sm:pt-16 lg:pt-12">
-          <div className="grid-bg pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
+        <section
+          id="home"
+          className="relative overflow-hidden pt-12 pb-16 sm:pt-16 lg:pt-12"
+        >
+          <div
+            className="grid-bg pointer-events-none absolute inset-0 opacity-40"
+            aria-hidden="true"
+          />
           <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1.2fr)_380px]">
             <Reveal className="max-w-[680px]">
               <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-card px-3 py-1 font-mono text-xs text-primary">
-                <ShieldCheck className="size-3.5" aria-hidden="true" /> B.E. Cybersecurity · 2023–2027
+                <ShieldCheck className="size-3.5" aria-hidden="true" /> B.E.
+                Cybersecurity · 2023–2027
               </p>
               <h1 className="text-5xl font-extrabold leading-[0.95] tracking-[-0.04em] sm:text-6xl lg:text-[5rem]">
                 {profile.name}
@@ -147,7 +193,8 @@ function Portfolio() {
                   href="#projects"
                   className="inline-flex items-center gap-2 rounded-lg bg-[image:var(--gradient-neon)] px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--glow-primary)] transition-transform hover:-translate-y-0.5"
                 >
-                  View Projects <ArrowRight className="size-4" aria-hidden="true" />
+                  View Projects{" "}
+                  <ArrowRight className="size-4" aria-hidden="true" />
                 </a>
                 <a
                   href="#contact"
@@ -158,7 +205,8 @@ function Portfolio() {
               </div>
 
               <p className="mt-6 inline-flex items-center gap-2 text-sm text-muted-foreground">
-                <MapPin className="size-4" aria-hidden="true" /> {profile.location}
+                <MapPin className="size-4" aria-hidden="true" />{" "}
+                {profile.location}
               </p>
             </Reveal>
 
@@ -178,18 +226,29 @@ function Portfolio() {
                   </span>
                 </div>
 
-                <h2 className="mt-6 text-[2rem] font-semibold tracking-[-0.04em]">Security Focus</h2>
+                <h2 className="mt-6 text-[2rem] font-semibold tracking-[-0.04em]">
+                  Security Focus
+                </h2>
                 <ul className="mt-5 space-y-3 text-left text-sm sm:text-[15px]">
                   <li className="flex items-start gap-3">
-                    <Radar className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                    <Radar
+                      className="mt-0.5 size-4 shrink-0 text-primary"
+                      aria-hidden="true"
+                    />
                     Vulnerability scanning &amp; assessment
                   </li>
                   <li className="flex items-start gap-3">
-                    <FileSearch className="mt-0.5 size-4 shrink-0 text-secondary" aria-hidden="true" />
+                    <FileSearch
+                      className="mt-0.5 size-4 shrink-0 text-secondary"
+                      aria-hidden="true"
+                    />
                     Security reporting &amp; risk classification
                   </li>
                   <li className="flex items-start gap-3">
-                    <BookOpen className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                    <BookOpen
+                      className="mt-0.5 size-4 shrink-0 text-primary"
+                      aria-hidden="true"
+                    />
                     Learning SOC, log analysis, SIEM basics
                   </li>
                 </ul>
@@ -206,29 +265,35 @@ function Portfolio() {
           <div className="grid gap-6 lg:grid-cols-3">
             <Reveal className="panel p-7 lg:col-span-2">
               <p className="text-muted-foreground">
-                I am a final year B.E. Cybersecurity student with practical internship exposure to
-                vulnerability scanning, security assessment, and security reporting. During my
-                internships, I worked with security tools such as Nessus, Nmap, Wireshark, Metasploit,
-                Burp Suite, and OWASP ZAP. I am also currently developing my knowledge of SOC
-                fundamentals, basic log analysis, and SIEM concepts.
+                I am a final year B.E. Cybersecurity student with practical
+                internship exposure to vulnerability scanning, security
+                assessment, and security reporting. During my internships, I
+                worked with security tools such as Nessus, Nmap, Wireshark,
+                Metasploit, Burp Suite, and OWASP ZAP. I am also currently
+                developing my knowledge of SOC fundamentals, basic log analysis,
+                and SIEM concepts.
               </p>
               <p className="mt-5 rounded-lg border-l-2 border-primary bg-card-alt p-4 text-sm text-foreground">
-                My current goal is to build strong practical skills in cybersecurity operations and
-                grow toward a SOC/Blue Team career.
+                My current goal is to build strong practical skills in
+                cybersecurity operations and grow toward a SOC/Blue Team career.
               </p>
             </Reveal>
             <Reveal delay={100} className="panel p-7">
               <h3 className="text-lg font-semibold">Quick Facts</h3>
               <dl className="mt-4 space-y-4 text-sm">
                 <div>
-                  <dt className="font-mono text-xs uppercase tracking-wider text-secondary">Focus</dt>
+                  <dt className="font-mono text-xs uppercase tracking-wider text-secondary">
+                    Focus
+                  </dt>
                   <dd className="mt-1">Cybersecurity / SOC / Blue Team</dd>
                 </div>
                 <div>
                   <dt className="font-mono text-xs uppercase tracking-wider text-secondary">
                     Education
                   </dt>
-                  <dd className="mt-1">{education[0]!.degree}, {education[0]!.detail}</dd>
+                  <dd className="mt-1">
+                    {education[0]!.degree}, {education[0]!.detail}
+                  </dd>
                 </div>
                 <div>
                   <dt className="font-mono text-xs uppercase tracking-wider text-secondary">
@@ -244,15 +309,28 @@ function Portfolio() {
         {/* SKILLS */}
         <Section id="skills">
           <Reveal>
-            <SectionHeading eyebrow="Capabilities" title="Skills" />
+            <SectionHeading
+              eyebrow="Capabilities"
+              title="Skills"
+              description="Click on any skill to view practical applications, context, and proficiency level."
+            />
           </Reveal>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {skillGroups.map((group, i) => (
               <Reveal key={group.title} delay={i * 70} className="panel p-6">
-                <h3 className="text-lg font-semibold text-secondary">{group.title}</h3>
+                <h3 className="text-lg font-semibold text-secondary">
+                  {group.title}
+                </h3>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {group.skills.map((s) => (
-                    <Tag key={s}>{s}</Tag>
+                    <Tag
+                      key={s}
+                      clickable
+                      onClick={() => setSkillOpen(s)}
+                      data-skill-name={s}
+                    >
+                      {s}
+                    </Tag>
                   ))}
                 </div>
               </Reveal>
@@ -295,12 +373,19 @@ function Portfolio() {
                         className="logo-neon size-7"
                       />
                     ) : (
-                      <ShieldCheck className="size-7 text-primary" aria-hidden="true" />
+                      <ShieldCheck
+                        className="size-7 text-primary"
+                        aria-hidden="true"
+                      />
                     )}
                   </span>
                   <h3 className="mt-4 text-base font-semibold">{tool.name}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{tool.what}</p>
-                  <p className="mt-3 text-xs leading-relaxed text-secondary">{tool.purpose}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {tool.what}
+                  </p>
+                  <p className="mt-3 text-xs leading-relaxed text-secondary">
+                    {tool.purpose}
+                  </p>
                 </div>
               ))}
             </div>
@@ -310,31 +395,46 @@ function Portfolio() {
         {/* EXPERIENCE */}
         <Section id="experience">
           <Reveal>
-            <SectionHeading eyebrow="Practical exposure" title="Internship Experience" />
+            <SectionHeading
+              eyebrow="Practical exposure"
+              title="Internship Experience"
+            />
           </Reveal>
           <ol className="relative space-y-6 border-l border-border pl-6">
             {experiences.map((exp, i) => (
-              <Reveal as="li" key={exp.company} delay={i * 90} className="panel p-6">
+              <Reveal
+                as="li"
+                key={exp.company}
+                delay={i * 90}
+                className="panel p-6"
+              >
                 <span
                   className="absolute -left-[7px] mt-2 size-3 rounded-full bg-primary shadow-[var(--glow-primary)]"
                   aria-hidden="true"
                 />
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <h3 className="text-lg font-semibold">
-                    {exp.role} · <span className="text-secondary">{exp.company}</span>
+                    {exp.role} ·{" "}
+                    <span className="text-secondary">{exp.company}</span>
                   </h3>
-                  <span className="font-mono text-xs text-muted-foreground">{exp.period}</span>
+                  <span className="font-mono text-xs text-muted-foreground">
+                    {exp.period}
+                  </span>
                 </div>
-                <p className="mt-3 text-sm text-muted-foreground">{exp.summary}</p>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  {exp.summary}
+                </p>
                 <button
                   type="button"
                   onClick={() => setExpOpen(i)}
+                  data-exp-idx={i}
+                  aria-label={`View details for ${exp.role} at ${exp.company}`}
                   className="mt-5 inline-flex items-center gap-2 rounded-lg border border-secondary/50 px-4 py-2 text-sm font-semibold text-secondary transition-colors hover:bg-secondary/10"
                 >
-                  View Details <ArrowRight className="size-4" aria-hidden="true" />
+                  View Details{" "}
+                  <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
               </Reveal>
-
             ))}
           </ol>
         </Section>
@@ -358,7 +458,9 @@ function Portfolio() {
               <div className="grid-bg relative grid min-h-56 place-items-center overflow-hidden border-b border-border bg-card-alt p-8 text-center lg:col-span-2 lg:border-b-0 lg:border-r">
                 <div
                   className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
-                  style={{ backgroundImage: `url('/projects/project-logo-bg.png')` }}
+                  style={{
+                    backgroundImage: `url('/projects/project-logo-bg.png')`,
+                  }}
                   aria-hidden="true"
                 />
                 <div
@@ -372,7 +474,10 @@ function Portfolio() {
                     className="relative z-10 mx-auto size-28 rounded-2xl shadow-[var(--glow-primary)]"
                   />
                 ) : (
-                  <ImageIcon className="relative z-10 size-8 text-secondary" aria-hidden="true" />
+                  <ImageIcon
+                    className="relative z-10 size-8 text-secondary"
+                    aria-hidden="true"
+                  />
                 )}
               </div>
 
@@ -383,7 +488,9 @@ function Portfolio() {
                 <h3 className="mt-2 text-2xl font-bold">
                   {project.title} – {project.subtitle}
                 </h3>
-                <p className="mt-3 text-muted-foreground">{project.shortDescription}</p>
+                <p className="mt-3 text-muted-foreground">
+                  {project.shortDescription}
+                </p>
                 <div className="mt-6 flex flex-wrap gap-2">
                   {project.tags.map((t) => (
                     <Tag key={t}>{t}</Tag>
@@ -392,9 +499,12 @@ function Portfolio() {
                 <button
                   type="button"
                   onClick={() => setProjectOpen(true)}
+                  data-project-btn="true"
+                  aria-label={`View details for ${project.title}`}
                   className="mt-6 inline-flex items-center gap-2 rounded-lg border border-primary/50 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
                 >
-                  View Project <ArrowRight className="size-4" aria-hidden="true" />
+                  View Project{" "}
+                  <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -412,8 +522,14 @@ function Portfolio() {
             </h3>
             <ul className="mt-5 grid gap-3 sm:grid-cols-2">
               {securityKnowledge.map((item) => (
-                <li key={item} className="flex gap-3 text-sm text-muted-foreground">
-                  <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                <li
+                  key={item}
+                  className="flex gap-3 text-sm text-muted-foreground"
+                >
+                  <ShieldCheck
+                    className="mt-0.5 size-4 shrink-0 text-primary"
+                    aria-hidden="true"
+                  />
                   {item}
                 </li>
               ))}
@@ -424,19 +540,27 @@ function Portfolio() {
         {/* CERTIFICATIONS */}
         <Section id="certifications">
           <Reveal>
-            <SectionHeading eyebrow="Verified learning" title="Certifications" />
+            <SectionHeading
+              eyebrow="Verified learning"
+              title="Certifications"
+            />
           </Reveal>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {certifications.map((cert, i) => (
               <Reveal key={cert.name} delay={i * 60} className="panel p-6">
                 <h3 className="font-semibold">{cert.name}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{cert.issuer}</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {cert.issuer}
+                </p>
                 <button
                   type="button"
                   onClick={() => setCertOpen(i)}
+                  data-cert-idx={i}
+                  aria-label={`View details for ${cert.name}`}
                   className="mt-5 inline-flex items-center gap-2 rounded-lg border border-secondary/50 px-4 py-2 text-sm font-semibold text-secondary transition-colors hover:bg-secondary/10"
                 >
-                  View Details <ArrowRight className="size-4" aria-hidden="true" />
+                  View Details{" "}
+                  <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
               </Reveal>
             ))}
@@ -446,7 +570,10 @@ function Portfolio() {
         {/* LEARNING */}
         <Section id="learning">
           <Reveal>
-            <SectionHeading eyebrow="Beginner / Currently Learning" title="Currently Learning" />
+            <SectionHeading
+              eyebrow="Beginner / Currently Learning"
+              title="Currently Learning"
+            />
           </Reveal>
           <div className="grid gap-6 md:grid-cols-3">
             {learning.map((item, i) => (
@@ -455,7 +582,9 @@ function Portfolio() {
                   Beginner / Currently Learning
                 </span>
                 <h3 className="mt-4 text-lg font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {item.description}
+                </p>
               </Reveal>
             ))}
           </div>
@@ -468,9 +597,15 @@ function Portfolio() {
           </Reveal>
           <div className="grid gap-5">
             {education.map((edu, i) => (
-              <Reveal key={edu.institution} className="panel flex flex-wrap items-center gap-5 p-7">
+              <Reveal
+                key={edu.institution}
+                className="panel flex flex-wrap items-center gap-5 p-7"
+              >
                 <span className="grid size-12 shrink-0 place-items-center rounded-lg border border-primary/30 bg-card-alt">
-                  <GraduationCap className="size-6 text-primary" aria-hidden="true" />
+                  <GraduationCap
+                    className="size-6 text-primary"
+                    aria-hidden="true"
+                  />
                 </span>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold">{edu.institution}</h3>
@@ -478,9 +613,12 @@ function Portfolio() {
                 <button
                   type="button"
                   onClick={() => setEduOpen(i)}
+                  data-edu-idx={i}
+                  aria-label={`View details for ${edu.institution}`}
                   className="inline-flex items-center gap-2 rounded-lg border border-secondary/50 px-4 py-2 text-sm font-semibold text-secondary transition-colors hover:bg-secondary/10"
                 >
-                  View Details <ArrowRight className="size-4" aria-hidden="true" />
+                  View Details{" "}
+                  <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
               </Reveal>
             ))}
@@ -495,8 +633,9 @@ function Portfolio() {
           <div className="grid gap-6 lg:grid-cols-2">
             <Reveal className="panel p-7">
               <p className="mb-6 text-muted-foreground">
-                I am interested in cybersecurity opportunities, internships, and entry-level roles
-                where I can continue developing my practical security skills.
+                I am interested in cybersecurity opportunities, internships, and
+                entry-level roles where I can continue developing my practical
+                security skills.
               </p>
               <ContactForm />
               <div className="mt-6 flex flex-wrap gap-3">
@@ -522,18 +661,27 @@ function Portfolio() {
               <ul className="space-y-4 text-sm">
                 <li className="flex items-center gap-3">
                   <Mail className="size-4 text-primary" aria-hidden="true" />
-                  <a href={`mailto:${profile.email}`} className="hover:text-primary">
+                  <a
+                    href={`mailto:${profile.email}`}
+                    className="hover:text-primary"
+                  >
                     {profile.email}
                   </a>
                 </li>
                 <li className="flex items-center gap-3">
                   <Phone className="size-4 text-primary" aria-hidden="true" />
-                  <a href={`tel:${profile.phone.replace(/\s/g, "")}`} className="hover:text-primary">
+                  <a
+                    href={`tel:${profile.phone.replace(/\s/g, "")}`}
+                    className="hover:text-primary"
+                  >
                     {profile.phone}
                   </a>
                 </li>
                 <li className="flex items-center gap-3">
-                  <Linkedin className="size-4 text-primary" aria-hidden="true" />
+                  <Linkedin
+                    className="size-4 text-primary"
+                    aria-hidden="true"
+                  />
                   <a
                     href={profile.linkedin}
                     target="_blank"
@@ -577,7 +725,9 @@ function Portfolio() {
       >
         <div className="space-y-6 text-sm">
           <div>
-            <h4 className="text-sm font-semibold text-secondary">Project Description</h4>
+            <h4 className="text-sm font-semibold text-secondary">
+              Project Description
+            </h4>
             <p className="mt-2 text-muted-foreground">{project.description}</p>
           </div>
           <div>
@@ -587,22 +737,30 @@ function Portfolio() {
           <div>
             <h4 className="text-sm font-semibold text-secondary">Solution</h4>
             <p className="mt-2 text-muted-foreground">
-              FakeXpose provides a single platform for detecting deepfakes across multiple media
-              types.
+              FakeXpose provides a single platform for detecting deepfakes
+              across multiple media types.
             </p>
             <ul className="mt-3 space-y-2">
               {project.solution.map((s) => (
                 <li key={s.label} className="flex gap-3">
-                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true" />
+                  <span
+                    className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
+                    aria-hidden="true"
+                  />
                   <span className="text-muted-foreground">
-                    <span className="font-semibold text-foreground">{s.label}:</span> {s.text}
+                    <span className="font-semibold text-foreground">
+                      {s.label}:
+                    </span>{" "}
+                    {s.text}
                   </span>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-secondary">Technologies Used</h4>
+            <h4 className="text-sm font-semibold text-secondary">
+              Technologies Used
+            </h4>
             <div className="mt-3 flex flex-wrap gap-2">
               {project.technologies.map((t) => (
                 <Tag key={t}>{t}</Tag>
@@ -618,13 +776,20 @@ function Portfolio() {
             </ul>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-secondary">Key Features</h4>
+            <h4 className="text-sm font-semibold text-secondary">
+              Key Features
+            </h4>
             <ul className="mt-3 space-y-2">
               {project.features.map((f) => (
                 <li key={f.title} className="flex gap-3">
-                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-secondary" aria-hidden="true" />
+                  <span
+                    className="mt-2 size-1.5 shrink-0 rounded-full bg-secondary"
+                    aria-hidden="true"
+                  />
                   <span className="text-muted-foreground">
-                    <span className="font-semibold text-foreground">{f.title}</span>
+                    <span className="font-semibold text-foreground">
+                      {f.title}
+                    </span>
                     {f.text ? ` — ${f.text}` : ""}
                   </span>
                 </li>
@@ -634,12 +799,18 @@ function Portfolio() {
           {project.images.length > 0 && (
             <button
               type="button"
+              data-lightbox-project="true"
               onClick={() =>
-                setLightbox({ images: project.images, index: 0, title: `${project.title} screenshots` })
+                setLightbox({
+                  images: project.images,
+                  index: 0,
+                  title: `${project.title} screenshots`,
+                })
               }
               className="inline-flex items-center gap-2 rounded-lg border border-primary/50 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
             >
-              <ImageIcon className="size-4" aria-hidden="true" /> View Screenshots
+              <ImageIcon className="size-4" aria-hidden="true" /> View
+              Screenshots
             </button>
           )}
         </div>
@@ -658,11 +829,16 @@ function Portfolio() {
       >
         {expOpen !== null && (
           <div className="space-y-6 text-sm">
-            <p className="text-muted-foreground">{experiences[expOpen]!.summary}</p>
+            <p className="text-muted-foreground">
+              {experiences[expOpen]!.summary}
+            </p>
             <ul className="space-y-2">
               {experiences[expOpen]!.points.map((p) => (
                 <li key={p} className="flex gap-3">
-                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-secondary" aria-hidden="true" />
+                  <span
+                    className="mt-2 size-1.5 shrink-0 rounded-full bg-secondary"
+                    aria-hidden="true"
+                  />
                   <span className="text-muted-foreground">{p}</span>
                 </li>
               ))}
@@ -670,6 +846,7 @@ function Portfolio() {
             {experiences[expOpen]!.proofImage && (
               <button
                 type="button"
+                data-lightbox-exp={expOpen}
                 onClick={() =>
                   setLightbox({
                     images: [
@@ -684,7 +861,8 @@ function Portfolio() {
                 }
                 className="inline-flex items-center gap-2 rounded-lg border border-primary/50 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
               >
-                <Award className="size-4" aria-hidden="true" /> View Internship Certificate
+                <Award className="size-4" aria-hidden="true" /> View Internship
+                Certificate
               </button>
             )}
           </div>
@@ -701,24 +879,39 @@ function Portfolio() {
         {certOpen !== null && (
           <div className="space-y-5 text-sm">
             <div>
-              <p className="text-sm font-semibold text-secondary">What is this certification?</p>
-              <p className="mt-2 text-muted-foreground">{certifications[certOpen]!.whatIsThis}</p>
+              <p className="text-sm font-semibold text-secondary">
+                What is this certification?
+              </p>
+              <p className="mt-2 text-muted-foreground">
+                {certifications[certOpen]!.whatIsThis}
+              </p>
             </div>
             <div>
               <p className="text-sm font-semibold text-secondary">Purpose</p>
-              <p className="mt-2 text-muted-foreground">{certifications[certOpen]!.purpose}</p>
+              <p className="mt-2 text-muted-foreground">
+                {certifications[certOpen]!.purpose}
+              </p>
             </div>
             <div>
-              <p className="text-sm font-semibold text-secondary">What I learned</p>
-              <p className="mt-2 text-muted-foreground">{certifications[certOpen]!.whatILearned}</p>
+              <p className="text-sm font-semibold text-secondary">
+                What I learned
+              </p>
+              <p className="mt-2 text-muted-foreground">
+                {certifications[certOpen]!.whatILearned}
+              </p>
             </div>
             <div>
-              <p className="text-sm font-semibold text-secondary">Where it is useful</p>
-              <p className="mt-2 text-muted-foreground">{certifications[certOpen]!.whereUseful}</p>
+              <p className="text-sm font-semibold text-secondary">
+                Where it is useful
+              </p>
+              <p className="mt-2 text-muted-foreground">
+                {certifications[certOpen]!.whereUseful}
+              </p>
             </div>
             {certifications[certOpen]!.image && (
               <button
                 type="button"
+                data-lightbox-cert={certOpen}
                 onClick={() =>
                   setLightbox({
                     images: [
@@ -749,12 +942,66 @@ function Portfolio() {
       >
         {eduOpen !== null && (
           <div className="space-y-2 text-sm">
-            <p className="text-base font-semibold text-foreground">{education[eduOpen]!.degree}</p>
+            <p className="text-base font-semibold text-foreground">
+              {education[eduOpen]!.degree}
+            </p>
             {education[eduOpen]!.years && (
-              <p className="font-mono text-secondary">{education[eduOpen]!.years}</p>
+              <p className="font-mono text-secondary">
+                {education[eduOpen]!.years}
+              </p>
             )}
             <p className="text-muted-foreground">{education[eduOpen]!.place}</p>
-            <p className="font-mono text-xs text-secondary">{education[eduOpen]!.detail}</p>
+            <p className="font-mono text-xs text-secondary">
+              {education[eduOpen]!.detail}
+            </p>
+          </div>
+        )}
+      </Modal>
+
+      {/* SKILL DETAILS */}
+      <Modal
+        open={skillOpen !== null}
+        onClose={() => setSkillOpen(null)}
+        eyebrow="Skill Detail"
+        title={skillOpen || ""}
+      >
+        {skillOpen && (
+          <div className="space-y-4 text-sm">
+            {skillDetails[skillOpen] ? (
+              <>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs uppercase tracking-wider text-secondary">
+                    Proficiency Level:
+                  </span>
+                  <span className="rounded-full border border-primary/40 bg-card-alt px-3 py-0.5 font-mono text-xs text-primary">
+                    {skillDetails[skillOpen].level}
+                  </span>
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-secondary">
+                    Purpose &amp; Application
+                  </h4>
+                  <p className="mt-2 text-muted-foreground">
+                    {skillDetails[skillOpen].purpose}
+                  </p>
+                </div>
+                {skillDetails[skillOpen].where && (
+                  <div>
+                    <h4 className="text-sm font-semibold text-secondary">
+                      Practical Context
+                    </h4>
+                    <p className="mt-2 text-muted-foreground">
+                      {skillDetails[skillOpen].where}
+                    </p>
+                  </div>
+                )}
+              </>
+            ) : (
+              <p className="text-muted-foreground">
+                Practical skill applied across cybersecurity operations and
+                projects.
+              </p>
+            )}
           </div>
         )}
       </Modal>

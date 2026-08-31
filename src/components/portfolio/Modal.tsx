@@ -46,7 +46,9 @@ export function Modal({
           <X className="size-5" aria-hidden="true" />
         </button>
         {eyebrow && (
-          <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-secondary">{eyebrow}</p>
+          <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-secondary">
+            {eyebrow}
+          </p>
         )}
         <h3 className="pr-10 text-2xl font-bold">{title}</h3>
         <div className="mt-5">{children}</div>

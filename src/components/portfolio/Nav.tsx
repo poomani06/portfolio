@@ -21,7 +21,10 @@ export function Nav() {
         }`}
       >
         <div>
-          <a href="#home" className="flex items-center gap-2 pb-8 text-xl font-semibold tracking-tight text-foreground">
+          <a
+            href="#home"
+            className="flex items-center gap-2 pb-8 text-xl font-semibold tracking-tight text-foreground"
+          >
             <ShieldCheck className="size-5 text-primary" aria-hidden="true" />
             <span className="neon-text">{profile.name}</span>
           </a>
@@ -47,12 +50,19 @@ export function Nav() {
           aria-label={open ? "Close navigation menu" : "Open navigation menu"}
           className="rounded-md border border-border p-2 text-foreground transition-colors hover:border-primary hover:text-primary lg:hidden"
         >
-          {open ? <X className="size-5" aria-hidden="true" /> : <Menu className="size-5" aria-hidden="true" />}
+          {open ? (
+            <X className="size-5" aria-hidden="true" />
+          ) : (
+            <Menu className="size-5" aria-hidden="true" />
+          )}
         </button>
       </aside>
 
       {open && (
-        <div id="mobile-menu" className="border-t border-border bg-background lg:hidden">
+        <div
+          id="mobile-menu"
+          className="border-t border-border bg-background lg:hidden"
+        >
           <ul className="mx-auto max-w-6xl px-4 py-2 sm:px-6">
             {navItems.map((item) => (
               <li key={item.id}>

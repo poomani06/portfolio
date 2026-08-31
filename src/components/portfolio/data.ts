@@ -3,7 +3,8 @@
 // left as `null` until the real certificate/screenshot files are uploaded; the UI
 // shows a clearly-marked DEMO placeholder until then.
 
-export type SkillLevel = "Foundational" | "Beginner" | "Basic" | "Hands-on" | "Currently Learning";
+export type SkillLevel =
+  "Foundational" | "Beginner" | "Basic" | "Hands-on" | "Currently Learning";
 
 export interface ToolDetail {
   name: string;
@@ -111,52 +112,161 @@ export const skillDetails: Record<
   string,
   { purpose: string; level: SkillLevel; where?: string }
 > = {
-  "Vulnerability Scanning": {
-    purpose: "Running scans to identify known vulnerabilities in systems and services.",
-    level: "Hands-on",
-    where: "CypherDote internship (Nessus)",
+  "Security Concepts": {
+    purpose:
+      "Understanding foundational cybersecurity principles, CIA triad (Confidentiality, Integrity, Availability), and defense-in-depth security architectures.",
+    level: "Foundational",
+    where: "Academic coursework & self-directed study",
   },
-  "VAPT Reporting": {
-    purpose: "Documenting security findings with risk classification and remediation guidance.",
-    level: "Hands-on",
-    where: "CypherDote internship",
+  "Risk Assessment": {
+    purpose:
+      "Identifying, analyzing, and evaluating potential security risks to digital assets and systems to prioritize protection measures.",
+    level: "Foundational",
+    where: "CypherDote internship & academic projects",
   },
-  "Risk Classification": {
-    purpose: "Rating findings by severity (e.g. CVSS) to prioritise remediation.",
-    level: "Hands-on",
+  "Security Reporting": {
+    purpose:
+      "Structuring and documenting security assessment findings with clear risk classifications, impact analysis, and actionable remediation steps.",
+    level: "Foundational",
+    where: "CypherDote internship (VAPT reporting)",
+  },
+  "Vulnerability Validation": {
+    purpose:
+      "Verifying scanner outputs in controlled environments to confirm exploitable vulnerabilities and eliminate false positive results.",
+    level: "Foundational",
+    where: "CypherDote internship (lab testing)",
+  },
+  "CVSS Severity Rating": {
+    purpose:
+      "Calculating Common Vulnerability Scoring System (CVSS v3.1) metrics (Base, Temporal, Environmental) to gauge vulnerability severity and patching urgency.",
+    level: "Foundational",
     where: "CypherDote internship",
   },
   "Log Collection": {
-    purpose: "Collecting logs from servers, systems, firewalls, and other devices.",
+    purpose:
+      "Collecting and aggregating system, authentication, and firewall logs from diverse endpoints and network equipment.",
+    level: "Beginner",
+    where: "Eagle-HiTech internship (SOC L1 basics)",
+  },
+  "Log Monitoring": {
+    purpose:
+      "Continuously monitoring event logs in near real-time to detect anomalous patterns, unauthorized logins, and indicators of compromise.",
+    level: "Beginner",
+    where: "Eagle-HiTech internship (SOC L1 basics)",
+  },
+  "Alert Generation": {
+    purpose:
+      "Understanding rule triggers, correlation logic, and threshold-based alert generation in SIEM and monitoring systems.",
     level: "Beginner",
     where: "Eagle-HiTech internship (SOC L1 basics)",
   },
   "Alert Investigation": {
-    purpose: "Checking alert details (user, IP, time, system, activity) to understand an event.",
+    purpose:
+      "Checking alert telemetry such as username, IP address, timestamp, affected system, and activity sequence to determine scope.",
     level: "Beginner",
     where: "Eagle-HiTech internship (SOC L1 basics)",
   },
-  "Basic OWASP Top 10 Awareness": {
-    purpose: "Basic awareness of common web application security risks — not expert level.",
-    level: "Basic",
+  "Incident Analysis": {
+    purpose:
+      "Triage and verification to distinguish genuine security incidents from benign user activity or false positives.",
+    level: "Beginner",
+    where: "Eagle-HiTech internship (SOC L1 basics)",
   },
-  "Basic Web Security Concepts": {
-    purpose: "Foundational understanding of web security concepts.",
-    level: "Basic",
+  Escalation: {
+    purpose:
+      "Following standardized Incident Response playbooks to escalate confirmed high-severity incidents to L2/L3 security specialists.",
+    level: "Beginner",
+    where: "Eagle-HiTech internship (SOC L1 basics)",
+  },
+  Documentation: {
+    purpose:
+      "Recording thorough case notes, evidence logs, remediation steps taken, and post-incident summary documentation.",
+    level: "Beginner",
+    where: "Eagle-HiTech internship (SOC L1 basics)",
+  },
+  "Vulnerability Scanning": {
+    purpose:
+      "Running automated and customized scans using tools like Nessus to discover vulnerabilities, misconfigurations, and outdated software.",
+    level: "Hands-on",
+    where: "CypherDote internship (Nessus)",
+  },
+  "Open Port Identification": {
+    purpose:
+      "Mapping exposed TCP/UDP ports on target systems to assess attack surfaces and identify unneeded exposed services.",
+    level: "Hands-on",
+    where: "CypherDote internship (Nmap)",
+  },
+  "Insecure Service Detection": {
+    purpose:
+      "Identifying insecure or legacy communication protocols (e.g., Telnet, unencrypted HTTP, deprecated SSL/TLS, SMBv1).",
+    level: "Hands-on",
+    where: "CypherDote internship",
+  },
+  "VAPT Reporting": {
+    purpose:
+      "Authoring comprehensive Vulnerability Assessment and Penetration Testing reports tailored for technical teams and leadership.",
+    level: "Hands-on",
+    where: "CypherDote internship",
+  },
+  "Risk Classification": {
+    purpose:
+      "Categorizing discovered vulnerabilities by threat likelihood, exploitability, and organizational business impact.",
+    level: "Hands-on",
+    where: "CypherDote internship",
+  },
+  "Remediation Recommendations": {
+    purpose:
+      "Formulating specific hardening steps, configuration patches, and architectural mitigations for each identified vulnerability.",
+    level: "Hands-on",
+    where: "CypherDote internship",
   },
   "Network Discovery": {
-    purpose: "Mapping live hosts and services on a network.",
+    purpose:
+      "Discovering active hosts, network topology, routing paths, and device profiles on local subnets and target segments.",
     level: "Basic",
+    where: "CypherDote internship & practical labs",
   },
   "Port Scanning": {
-    purpose: "Identifying open ports and running services.",
+    purpose:
+      "Executing stealth SYN scans, version detection, and OS fingerprinting using Nmap.",
     level: "Basic",
     where: "CypherDote internship (Nmap)",
   },
   "Packet Analysis": {
-    purpose: "Inspecting network traffic to understand activity.",
+    purpose:
+      "Capturing and dissecting network packets with Wireshark to inspect handshakes, protocol anomalies, and data transmission.",
     level: "Basic",
-    where: "Learning (Wireshark)",
+    where: "Practical learning (Wireshark)",
+  },
+  "Basic OWASP Top 10 Awareness": {
+    purpose:
+      "Awareness of critical web application risks including Injection, Broken Authentication, Sensitive Data Exposure, and Security Misconfiguration.",
+    level: "Basic",
+    where: "Coursework & self-directed research",
+  },
+  "Basic Web Security Concepts": {
+    purpose:
+      "Understanding client-server architecture, HTTP headers, cookies, sessions, and common web attack vectors.",
+    level: "Basic",
+    where: "Coursework & security labs",
+  },
+  "Reconnaissance Fundamentals": {
+    purpose:
+      "Conducting passive and active reconnaissance to gather intelligence on target domain perimeters, DNS records, and publicly exposed infrastructure.",
+    level: "Basic",
+    where: "Security fundamentals practice",
+  },
+  "Basic Java": {
+    purpose:
+      "Object-oriented programming, data structures, and core application development concepts.",
+    level: "Basic",
+    where: "Academic curriculum",
+  },
+  "Basic Python": {
+    purpose:
+      "Security scripting, automation, API integration, and basic deepfake detection pipeline implementation in FakeXpose.",
+    level: "Basic",
+    where: "Project development & automation scripts",
   },
 };
 
@@ -164,7 +274,8 @@ export const tools: ToolDetail[] = [
   {
     name: "Nessus",
     what: "A vulnerability scanner that checks systems for known security weaknesses.",
-    purpose: "Used to scan systems and report vulnerabilities with severity levels.",
+    purpose:
+      "Used to scan systems and report vulnerabilities with severity levels.",
     level: "Hands-on",
     where: "CypherDote internship",
     logo: "/logos/nessus.svg",
@@ -236,7 +347,8 @@ export const tools: ToolDetail[] = [
   {
     name: "Autopsy",
     what: "An open-source digital forensics platform for analysing disk images.",
-    purpose: "Used to learn basic examination of files and artifacts in an image.",
+    purpose:
+      "Used to learn basic examination of files and artifacts in an image.",
     level: "Currently Learning",
     where: "Learning",
     logo: "/logos/autopsy.svg",
@@ -276,7 +388,8 @@ export const experiences: Experience[] = [
     company: "Eagle-HiTech",
     period: "June – July 2026",
     location: "Chennai, Tamil Nadu",
-    summary: "Learned the basic work of a SOC L1 Analyst during the internship.",
+    summary:
+      "Learned the basic work of a SOC L1 Analyst during the internship.",
     points: [
       "Log Collection: Learned how to collect logs from servers, systems, firewalls, and other devices.",
       "Log Monitoring: Monitored logs to find unusual or suspicious activities.",
@@ -321,7 +434,10 @@ export const project: Project = {
   problem:
     "AI-generated deepfake content can manipulate facial expressions, lip movements, and voices with high realism. This creates risks such as misinformation, identity misuse, financial scams, and difficulties in verifying digital evidence.",
   solution: [
-    { label: "Image Detection", text: "Uses Xception to identify image-level manipulation." },
+    {
+      label: "Image Detection",
+      text: "Uses Xception to identify image-level manipulation.",
+    },
     {
       label: "Video Detection",
       text: "Extracts video frames and performs frame-level predictions, followed by median aggregation for video-level classification.",
@@ -330,8 +446,14 @@ export const project: Project = {
       label: "Audio Detection",
       text: "Uses WavLM speech embeddings to identify synthetic or manipulated speech.",
     },
-    { label: "Backend API", text: "Flask exposes the detection functionality through APIs." },
-    { label: "Storage", text: "MongoDB Atlas stores detection results and metadata." },
+    {
+      label: "Backend API",
+      text: "Flask exposes the detection functionality through APIs.",
+    },
+    {
+      label: "Storage",
+      text: "MongoDB Atlas stores detection results and metadata.",
+    },
   ],
   technologies: [
     "Python",
@@ -362,10 +484,22 @@ export const project: Project = {
   images: [
     { src: "/projects/fakexpose-1.png", alt: "FakeXpose login portal" },
     { src: "/projects/fakexpose-2.png", alt: "FakeXpose prediction dashboard" },
-    { src: "/projects/fakexpose-3.png", alt: "FakeXpose upload and new analysis screen" },
-    { src: "/projects/fakexpose-4.png", alt: "FakeXpose image manipulation result" },
-    { src: "/projects/fakexpose-5.png", alt: "FakeXpose video frame-level analysis" },
-    { src: "/projects/fakexpose-6.png", alt: "FakeXpose audio speech analysis" },
+    {
+      src: "/projects/fakexpose-3.png",
+      alt: "FakeXpose upload and new analysis screen",
+    },
+    {
+      src: "/projects/fakexpose-4.png",
+      alt: "FakeXpose image manipulation result",
+    },
+    {
+      src: "/projects/fakexpose-5.png",
+      alt: "FakeXpose video frame-level analysis",
+    },
+    {
+      src: "/projects/fakexpose-6.png",
+      alt: "FakeXpose audio speech analysis",
+    },
   ],
 };
 
@@ -388,10 +522,14 @@ export const certifications: Certification[] = [
     issuer: "Cisco Networking Academy",
     image: "/certificates/cybersecurity-essentials.jpeg",
     category: "Certification",
-    whatIsThis: "A foundational cybersecurity course focused on the basic principles of cyber safety, threats, and digital security concepts.",
-    purpose: "To build a clear understanding of common cybersecurity topics and how digital systems can be protected.",
-    whatILearned: "I learned basic cyber threat concepts, online safety practices, and the role of secure behavior in protecting devices and data.",
-    whereUseful: "This is useful for understanding the basics of cybersecurity, safe digital habits, and how security practices apply in everyday technology use.",
+    whatIsThis:
+      "A foundational cybersecurity course focused on the basic principles of cyber safety, threats, and digital security concepts.",
+    purpose:
+      "To build a clear understanding of common cybersecurity topics and how digital systems can be protected.",
+    whatILearned:
+      "I learned basic cyber threat concepts, online safety practices, and the role of secure behavior in protecting devices and data.",
+    whereUseful:
+      "This is useful for understanding the basics of cybersecurity, safe digital habits, and how security practices apply in everyday technology use.",
     certificateUrl: "/certificates/cybersecurity-essentials.jpeg",
   },
   {
@@ -399,10 +537,14 @@ export const certifications: Certification[] = [
     issuer: "GUVI",
     image: "/certificates/cybersecurity-essentials.jpeg",
     category: "Certification",
-    whatIsThis: "A learning program on key network security concepts and the basics of securing networks and connected systems.",
-    purpose: "To understand how networks are protected and how common security measures reduce risk in connected environments.",
-    whatILearned: "I learned about network security foundations, access control basics, common threats, and the importance of securing network services.",
-    whereUseful: "This is useful for understanding how network protection works in real-world environments, especially in system and security operations.",
+    whatIsThis:
+      "A learning program on key network security concepts and the basics of securing networks and connected systems.",
+    purpose:
+      "To understand how networks are protected and how common security measures reduce risk in connected environments.",
+    whatILearned:
+      "I learned about network security foundations, access control basics, common threats, and the importance of securing network services.",
+    whereUseful:
+      "This is useful for understanding how network protection works in real-world environments, especially in system and security operations.",
     certificateUrl: "/certificates/cybersecurity-essentials.jpeg",
   },
   {
@@ -410,10 +552,14 @@ export const certifications: Certification[] = [
     issuer: "Infosys Springboard",
     image: "/certificates/fundamentals-of-information-security.jpeg",
     category: "Certification",
-    whatIsThis: "A fundamentals-based information security course covering basic concepts, risks, and security principles used in digital systems.",
-    purpose: "To introduce the core ideas behind protecting information, systems, and digital assets from risk.",
-    whatILearned: "I learned the basic concepts of information security, risk awareness, and how confidentiality, integrity, and availability are maintained.",
-    whereUseful: "This is useful for building a strong foundation in information protection and understanding how security practices support safe technology usage.",
+    whatIsThis:
+      "A fundamentals-based information security course covering basic concepts, risks, and security principles used in digital systems.",
+    purpose:
+      "To introduce the core ideas behind protecting information, systems, and digital assets from risk.",
+    whatILearned:
+      "I learned the basic concepts of information security, risk awareness, and how confidentiality, integrity, and availability are maintained.",
+    whereUseful:
+      "This is useful for building a strong foundation in information protection and understanding how security practices support safe technology usage.",
     certificateUrl: "/certificates/fundamentals-of-information-security.jpeg",
   },
   {
@@ -421,10 +567,14 @@ export const certifications: Certification[] = [
     issuer: "Coursera",
     image: "/certificates/foundation-of-cyber-security.jpeg",
     category: "Certification",
-    whatIsThis: "A beginner-level cybersecurity course focused on foundational security concepts and core digital protection principles.",
-    purpose: "To strengthen understanding of cybersecurity basics and the importance of secure systems and controls.",
-    whatILearned: "I learned the main principles of cybersecurity, the role of security controls, and how common digital risks are addressed in practice.",
-    whereUseful: "This is useful for learning the fundamentals of cybersecurity and creating a base for further study in security operations and risk management.",
+    whatIsThis:
+      "A beginner-level cybersecurity course focused on foundational security concepts and core digital protection principles.",
+    purpose:
+      "To strengthen understanding of cybersecurity basics and the importance of secure systems and controls.",
+    whatILearned:
+      "I learned the main principles of cybersecurity, the role of security controls, and how common digital risks are addressed in practice.",
+    whereUseful:
+      "This is useful for learning the fundamentals of cybersecurity and creating a base for further study in security operations and risk management.",
     certificateUrl: "/certificates/foundation-of-cyber-security.jpeg",
   },
   {
@@ -432,10 +582,14 @@ export const certifications: Certification[] = [
     issuer: "SkillFront",
     image: "/certificates/iso-27001-associate.jpeg",
     category: "Certification",
-    whatIsThis: "A certification-oriented learning program on ISO/IEC 27001 concepts and information security management practices.",
-    purpose: "To understand the basics of information security management systems and the role of governance and control frameworks.",
-    whatILearned: "I learned the basic structure of ISO/IEC 27001, security governance concepts, and how information security is managed through policies and controls.",
-    whereUseful: "This is useful for understanding governance, risk, and compliance foundations, especially in security operations and information protection contexts.",
+    whatIsThis:
+      "A certification-oriented learning program on ISO/IEC 27001 concepts and information security management practices.",
+    purpose:
+      "To understand the basics of information security management systems and the role of governance and control frameworks.",
+    whatILearned:
+      "I learned the basic structure of ISO/IEC 27001, security governance concepts, and how information security is managed through policies and controls.",
+    whereUseful:
+      "This is useful for understanding governance, risk, and compliance foundations, especially in security operations and information protection contexts.",
     certificateUrl: "/certificates/iso-27001-associate.jpeg",
   },
 ];
@@ -468,12 +622,36 @@ export const education: EducationItem[] = [
 ];
 
 export const learning = [
-  { title: "SOC Fundamentals", description: "Learning the fundamentals of Security Operations Center workflows and security monitoring." },
-  { title: "Basic Log Analysis", description: "Learning how to understand authentication and security-related logs and identify suspicious activity." },
-  { title: "SIEM Concepts", description: "Learning the fundamentals of SIEM, security event collection, monitoring, and alert investigation." },
-  { title: "Alert Investigation", description: "Learning how to investigate alerts and determine whether activity is a real security issue." },
-  { title: "GRC Fundamentals", description: "Learning the basics of Governance, Risk, and Compliance — policies, risk management, and security standards." },
-  { title: "Security Monitoring", description: "Learning continuous monitoring of logs and systems for suspicious activity." },
+  {
+    title: "SOC Fundamentals",
+    description:
+      "Learning the fundamentals of Security Operations Center workflows and security monitoring.",
+  },
+  {
+    title: "Basic Log Analysis",
+    description:
+      "Learning how to understand authentication and security-related logs and identify suspicious activity.",
+  },
+  {
+    title: "SIEM Concepts",
+    description:
+      "Learning the fundamentals of SIEM, security event collection, monitoring, and alert investigation.",
+  },
+  {
+    title: "Alert Investigation",
+    description:
+      "Learning how to investigate alerts and determine whether activity is a real security issue.",
+  },
+  {
+    title: "GRC Fundamentals",
+    description:
+      "Learning the basics of Governance, Risk, and Compliance — policies, risk management, and security standards.",
+  },
+  {
+    title: "Security Monitoring",
+    description:
+      "Learning continuous monitoring of logs and systems for suspicious activity.",
+  },
 ];
 
 // Real profile photo path. Save the actual image at public/profile-photo.jpg.

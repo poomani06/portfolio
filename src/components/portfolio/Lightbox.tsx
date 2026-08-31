@@ -19,12 +19,12 @@ export function Lightbox({
   onIndexChange: (i: number) => void;
   title: string;
 }) {
-  
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowRight") onIndexChange((index + 1) % images.length);
-      if (e.key === "ArrowLeft") onIndexChange((index - 1 + images.length) % images.length);
+      if (e.key === "ArrowLeft")
+        onIndexChange((index - 1 + images.length) % images.length);
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
@@ -41,10 +41,16 @@ export function Lightbox({
       className="fixed inset-0 z-[70] flex items-center justify-center bg-background/95 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
-      <div className="relative max-h-full w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="relative max-h-full w-full max-w-4xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="mb-3 flex items-center justify-between">
           <p className="font-mono text-sm text-secondary">
-            {title} <span className="text-muted-foreground">· {index + 1} / {images.length}</span>
+            {title}{" "}
+            <span className="text-muted-foreground">
+              · {index + 1} / {images.length}
+            </span>
           </p>
           <button
             type="button"
@@ -66,7 +72,9 @@ export function Lightbox({
             <>
               <button
                 type="button"
-                onClick={() => onIndexChange((index - 1 + images.length) % images.length)}
+                onClick={() =>
+                  onIndexChange((index - 1 + images.length) % images.length)
+                }
                 aria-label="Previous image"
                 className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full border border-border bg-card/80 p-2 text-foreground backdrop-blur transition-colors hover:border-primary hover:text-primary"
               >
@@ -94,10 +102,16 @@ export function Lightbox({
                 aria-current={i === index}
                 onClick={() => onIndexChange(i)}
                 className={`size-14 overflow-hidden rounded-md border transition-all ${
-                  i === index ? "border-primary shadow-[var(--glow-primary)]" : "border-border opacity-60 hover:opacity-100"
+                  i === index
+                    ? "border-primary shadow-[var(--glow-primary)]"
+                    : "border-border opacity-60 hover:opacity-100"
                 }`}
               >
-                <img src={img.src} alt={img.alt} className="size-full object-cover" />
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className="size-full object-cover"
+                />
               </button>
             ))}
           </div>

@@ -8,7 +8,7 @@ export const getRouter = () => {
   const basepath =
     isBrowser && window.location.pathname.startsWith("/portfolio")
       ? "/portfolio"
-      : (import.meta.env.BASE_URL || "/");
+      : import.meta.env.BASE_URL || "/";
 
   const router = createRouter({
     routeTree,

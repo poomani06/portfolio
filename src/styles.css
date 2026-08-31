@@ -74,8 +74,10 @@
 
   --gradient-neon: linear-gradient(135deg, var(--primary), var(--secondary));
   --glow-primary: 0 0 24px color-mix(in oklab, var(--primary) 35%, transparent);
-  --glow-secondary: 0 0 24px color-mix(in oklab, var(--secondary) 32%, transparent);
-  --shadow-card: 0 18px 40px -24px color-mix(in oklab, var(--secondary) 45%, transparent);
+  --glow-secondary: 0 0 24px
+    color-mix(in oklab, var(--secondary) 32%, transparent);
+  --shadow-card: 0 18px 40px -24px
+    color-mix(in oklab, var(--secondary) 45%, transparent);
 }
 
 @layer base {
@@ -120,7 +122,10 @@
 
 @utility grid-bg {
   background-image:
-    linear-gradient(color-mix(in oklab, var(--secondary) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(
+      color-mix(in oklab, var(--secondary) 7%, transparent) 1px,
+      transparent 1px
+    ),
     linear-gradient(
       90deg,
       color-mix(in oklab, var(--secondary) 7%, transparent) 1px,
@@ -149,15 +154,13 @@
   &:hover {
     transform: translateY(-4px);
     border-color: color-mix(in oklab, var(--primary) 45%, transparent);
-    box-shadow:
-      var(--shadow-card),
-      var(--glow-primary);
+    box-shadow: var(--shadow-card), var(--glow-primary);
   }
 }
 
 @utility logo-neon {
-  filter: brightness(0) saturate(100%) invert(78%) sepia(60%) saturate(1200%) hue-rotate(90deg)
-    brightness(105%);
+  filter: brightness(0) saturate(100%) invert(78%) sepia(60%) saturate(1200%)
+    hue-rotate(90deg) brightness(105%);
 }
 
 @utility reveal {

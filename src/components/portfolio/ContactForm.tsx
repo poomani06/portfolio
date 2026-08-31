@@ -7,7 +7,9 @@ export function ContactForm() {
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   const inputClass =
@@ -19,21 +21,24 @@ export function ContactForm() {
     setErrorMsg("");
 
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${profile.email}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
+      const response = await fetch(
+        `https://formsubmit.co/ajax/${profile.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            _subject: subject || `Portfolio message from ${name}`,
+            message,
+            _template: "table",
+            _captcha: "false",
+          }),
         },
-        body: JSON.stringify({
-          name,
-          email,
-          _subject: subject || `Portfolio message from ${name}`,
-          message,
-          _template: "table",
-          _captcha: "false",
-        }),
-      });
+      );
 
       if (response.ok) {
         setStatus("success");
@@ -45,10 +50,14 @@ export function ContactForm() {
         const data = await response.json().catch(() => null);
         throw new Error(data?.message || "Failed to send message.");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       setStatus("error");
-      setErrorMsg(err.message || "Failed to send message. Please try again or contact me directly.");
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Failed to send message. Please try again or contact me directly.";
+      setErrorMsg(message);
     }
   }
 
@@ -70,7 +79,10 @@ export function ContactForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="cf-name" className="mb-1 block text-xs font-medium text-secondary">
+          <label
+            htmlFor="cf-name"
+            className="mb-1 block text-xs font-medium text-secondary"
+          >
             Name
           </label>
           <input
@@ -84,7 +96,10 @@ export function ContactForm() {
           />
         </div>
         <div>
-          <label htmlFor="cf-email" className="mb-1 block text-xs font-medium text-secondary">
+          <label
+            htmlFor="cf-email"
+            className="mb-1 block text-xs font-medium text-secondary"
+          >
             Email
           </label>
           <input
@@ -100,7 +115,10 @@ export function ContactForm() {
         </div>
       </div>
       <div>
-        <label htmlFor="cf-subject" className="mb-1 block text-xs font-medium text-secondary">
+        <label
+          htmlFor="cf-subject"
+          className="mb-1 block text-xs font-medium text-secondary"
+        >
           Subject
         </label>
         <input
@@ -113,7 +131,10 @@ export function ContactForm() {
         />
       </div>
       <div>
-        <label htmlFor="cf-message" className="mb-1 block text-xs font-medium text-secondary">
+        <label
+          htmlFor="cf-message"
+          className="mb-1 block text-xs font-medium text-secondary"
+        >
           Message
         </label>
         <textarea
@@ -134,7 +155,8 @@ export function ContactForm() {
       >
         {status === "loading" ? (
           <>
-            <Loader2 className="size-4 animate-spin" aria-hidden="true" /> Sending...
+            <Loader2 className="size-4 animate-spin" aria-hidden="true" />{" "}
+            Sending...
           </>
         ) : (
           <>
