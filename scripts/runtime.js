@@ -377,12 +377,14 @@
       src.startsWith("data:")
     )
       return src;
-    const base =
-      (
-        document.querySelector("base")?.getAttribute("href") || "/portfolio/"
-      ).replace(/\/+$/, "") + "/";
-    const clean = src.replace(/^\/+/, "").replace(/^portfolio\//, "");
-    return base + clean;
+    const baseTag = document.querySelector("base");
+    const baseHref =
+      (baseTag ? baseTag.getAttribute("href") : "/portfolio/").replace(
+        /\/+$/,
+        "",
+      ) + "/";
+    const cleanSrc = src.replace(/^\/+/, "").replace(/^portfolio\//, "");
+    return baseHref + cleanSrc;
   }
 
   function createModalContainer() {
@@ -398,7 +400,10 @@
   function closeModal() {
     const container = document.getElementById("pf-modal-root");
     if (container) container.innerHTML = "";
-    document.body.style.overflow = "";
+    const lb = document.getElementById("pf-lightbox-backdrop");
+    if (!lb) {
+      document.body.style.overflow = "";
+    }
   }
 
   function openModal(options) {
@@ -409,7 +414,7 @@
     document.body.style.overflow = "hidden";
     container.innerHTML = `
       <div id="pf-modal-backdrop" role="dialog" aria-modal="true" aria-label="${title}" class="fixed inset-0 z-[65] flex items-center justify-center bg-background/90 p-4 backdrop-blur-sm">
-        <div class="panel relative max-h-[88vh] w-full max-w-2xl overflow-y-auto p-6 sm:p-8" id="pf-modal-panel" onclick="event.stopPropagation()">
+        <div class="panel relative max-h-[88vh] w-full max-w-2xl overflow-y-auto p-6 sm:p-8" id="pf-modal-panel">
           <button type="button" id="pf-modal-close" aria-label="Close" class="absolute right-4 top-4 rounded-md border border-border bg-card p-2 text-foreground transition-colors hover:border-primary hover:text-primary">
             <svg class="size-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
           </button>
@@ -437,8 +442,12 @@
 
   function closeLightbox() {
     activeLightbox = null;
-    let lb = document.getElementById("pf-lightbox-root");
+    const lb = document.getElementById("pf-lightbox-root");
     if (lb) lb.innerHTML = "";
+    const modal = document.getElementById("pf-modal-backdrop");
+    if (!modal) {
+      document.body.style.overflow = "";
+    }
   }
 
   function renderLightbox() {
@@ -449,13 +458,14 @@
       lb.id = "pf-lightbox-root";
       document.body.appendChild(lb);
     }
+    document.body.style.overflow = "hidden";
     const { images, index, title } = activeLightbox;
     const current = images[index];
     if (!current) return;
 
     lb.innerHTML = `
       <div id="pf-lightbox-backdrop" role="dialog" aria-modal="true" aria-label="${title}" class="fixed inset-0 z-[70] flex items-center justify-center bg-background/95 p-4 backdrop-blur-sm">
-        <div class="relative max-h-full w-full max-w-4xl" id="pf-lightbox-panel" onclick="event.stopPropagation()">
+        <div class="relative max-h-full w-full max-w-4xl" id="pf-lightbox-panel">
           <div class="mb-3 flex items-center justify-between">
             <p class="font-mono text-sm text-secondary">
               ${title} <span class="text-muted-foreground">· ${index + 1} / ${images.length}</span>
@@ -503,10 +513,11 @@
     `;
 
     const backdrop = document.getElementById("pf-lightbox-backdrop");
-    if (backdrop)
+    if (backdrop) {
       backdrop.addEventListener("click", (e) => {
         if (e.target === backdrop) closeLightbox();
       });
+    }
     const closeBtn = document.getElementById("pf-lightbox-close");
     if (closeBtn) closeBtn.addEventListener("click", closeLightbox);
     const prevBtn = document.getElementById("pf-lb-prev");
@@ -795,18 +806,112 @@
 
     // Delegated click handler for all interactive buttons
     document.addEventListener("click", (e) => {
-      // 1. Project Detail button
+      // 1. View Certificate button (from main cards or inside modal)
+      const certImgBtn =
+        e.target.closest("[data-lightbox-cert]") ||
+        (e.target.closest("button") &&
+          e.target.closest("button").textContent.includes("View Certificate") &&
+          !e.target.closest("button").textContent.includes("Internship"));
+      if (certImgBtn) {
+        e.preventDefault();
+        let idx =
+          certImgBtn.dataset && certImgBtn.dataset.lightboxCert !== undefined
+            ? parseInt(certImgBtn.dataset.lightboxCert, 10)
+            : undefined;
+        if (isNaN(idx) || idx === undefined) {
+          // Find enclosing certification or active modal title
+          const card = certImgBtn.closest(".panel");
+          if (card) {
+            const h3 = card.querySelector("h3");
+            if (h3) {
+              idx = certifications.findIndex(
+                (c) =>
+                  c.name.toLowerCase() === h3.textContent.trim().toLowerCase(),
+              );
+            }
+          }
+        }
+        if (idx !== undefined && idx >= 0 && certifications[idx]) {
+          const cert = certifications[idx];
+          if (cert && cert.image) {
+            openLightbox(
+              [{ src: cert.image, alt: cert.name + " certificate" }],
+              0,
+              cert.name + " certificate",
+            );
+          }
+        }
+        return;
+      }
+
+      // 2. View Internship Certificate button (from main cards or inside modal)
+      const expCertBtn =
+        e.target.closest("[data-lightbox-exp]") ||
+        (e.target.closest("button") &&
+          (e.target
+            .closest("button")
+            .textContent.includes("View Internship Certificate") ||
+            (e.target.closest("#experience") &&
+              e.target
+                .closest("button")
+                .textContent.includes("View Certificate"))));
+      if (expCertBtn) {
+        e.preventDefault();
+        let idx =
+          expCertBtn.dataset && expCertBtn.dataset.lightboxExp !== undefined
+            ? parseInt(expCertBtn.dataset.lightboxExp, 10)
+            : undefined;
+        if (isNaN(idx) || idx === undefined) {
+          const card = expCertBtn.closest(".panel");
+          if (card) {
+            const h3 = card.querySelector("h3");
+            if (h3) {
+              idx = experiences.findIndex((exp) =>
+                h3.textContent.includes(exp.company),
+              );
+            }
+          }
+        }
+        if (idx === undefined || isNaN(idx)) idx = 0;
+        const exp = experiences[idx];
+        if (exp && exp.proofImage) {
+          openLightbox(
+            [
+              {
+                src: exp.proofImage,
+                alt: exp.company + " internship certificate",
+              },
+            ],
+            0,
+            exp.company + " internship certificate",
+          );
+        }
+        return;
+      }
+
+      // 3. View Screenshots button (from project section or inside project modal)
+      const ssBtn =
+        e.target.closest("[data-lightbox-project]") ||
+        (e.target.closest("button") &&
+          e.target.closest("button").textContent.includes("View Screenshots"));
+      if (ssBtn) {
+        e.preventDefault();
+        openLightbox(project.images, 0, project.title + " screenshots");
+        return;
+      }
+
+      // 4. Project Detail button
       const projBtn =
         e.target.closest("[data-project-btn]") ||
         (e.target.closest("#projects button") &&
-          e.target.textContent.includes("View Project"));
+          e.target.closest("button").textContent.includes("View Project"));
       if (projBtn) {
         e.preventDefault();
         showProjectModal();
         return;
       }
 
-      // 2. Experience Detail buttons
+      // 5. Experience Detail buttons
       const expBtn =
         e.target.closest("[data-exp-idx]") ||
         e.target.closest("#experience button");
@@ -818,7 +923,7 @@
         if (idx === undefined) {
           const allExpBtns = Array.from(
             document.querySelectorAll("#experience button"),
-          );
+          ).filter((b) => b.textContent.includes("View Details"));
           idx = allExpBtns.indexOf(expBtn);
         }
         if (idx !== undefined && idx >= 0) {
@@ -827,7 +932,7 @@
         return;
       }
 
-      // 3. Certification Detail buttons
+      // 6. Certification Detail buttons
       const certBtn =
         e.target.closest("[data-cert-idx]") ||
         e.target.closest("#certifications button");
@@ -839,7 +944,7 @@
         if (idx === undefined) {
           const allCertBtns = Array.from(
             document.querySelectorAll("#certifications button"),
-          );
+          ).filter((b) => b.textContent.includes("View Details"));
           idx = allCertBtns.indexOf(certBtn);
         }
         if (idx !== undefined && idx >= 0) {
@@ -848,7 +953,7 @@
         return;
       }
 
-      // 4. Education Detail buttons
+      // 7. Education Detail buttons
       const eduBtn =
         e.target.closest("[data-edu-idx]") ||
         e.target.closest("#education button");
@@ -869,7 +974,7 @@
         return;
       }
 
-      // 5. Skill tags
+      // 8. Skill tags
       const skillTag =
         e.target.closest("[data-skill-name]") ||
         (e.target.closest("#skills button, #skills span") &&
@@ -881,54 +986,6 @@
           showSkillModal(name);
           return;
         }
-      }
-
-      // 6. Inside Modal: View Screenshots
-      const ssBtn =
-        e.target.closest("[data-lightbox-project]") ||
-        (e.target.closest("#pf-modal-panel button") &&
-          e.target.textContent.includes("View Screenshots"));
-      if (ssBtn) {
-        e.preventDefault();
-        openLightbox(project.images, 0, project.title + " screenshots");
-        return;
-      }
-
-      // 7. Inside Modal: View Internship Certificate
-      const expCertBtn = e.target.closest("[data-lightbox-exp]");
-      if (expCertBtn) {
-        e.preventDefault();
-        const idx = parseInt(expCertBtn.dataset.lightboxExp, 10);
-        const exp = experiences[idx];
-        if (exp && exp.proofImage) {
-          openLightbox(
-            [
-              {
-                src: exp.proofImage,
-                alt: exp.company + " internship certificate",
-              },
-            ],
-            0,
-            exp.company + " internship certificate",
-          );
-        }
-        return;
-      }
-
-      // 8. Inside Modal: View Certificate
-      const certImgBtn = e.target.closest("[data-lightbox-cert]");
-      if (certImgBtn) {
-        e.preventDefault();
-        const idx = parseInt(certImgBtn.dataset.lightboxCert, 10);
-        const cert = certifications[idx];
-        if (cert && cert.image) {
-          openLightbox(
-            [{ src: cert.image, alt: cert.name + " certificate" }],
-            0,
-            cert.name + " certificate",
-          );
-        }
-        return;
       }
     });
 
