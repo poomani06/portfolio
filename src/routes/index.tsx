@@ -424,41 +424,16 @@ function Portfolio() {
                 <p className="mt-3 text-sm text-muted-foreground">
                   {exp.summary}
                 </p>
-                <div className="mt-5 flex flex-wrap items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setExpOpen(i)}
-                    data-exp-idx={i}
-                    aria-label={`View details for ${exp.role} at ${exp.company}`}
-                    className="inline-flex items-center gap-2 rounded-lg border border-secondary/50 px-4 py-2 text-sm font-semibold text-secondary transition-colors hover:bg-secondary/10"
-                  >
-                    View Details{" "}
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </button>
-                  {exp.proofImage && (
-                    <button
-                      type="button"
-                      data-lightbox-exp={i}
-                      onClick={() =>
-                        setLightbox({
-                          images: [
-                            {
-                              src: exp.proofImage as string,
-                              alt: `${exp.company} internship certificate`,
-                            },
-                          ],
-                          index: 0,
-                          title: `${exp.company} internship certificate`,
-                        })
-                      }
-                      aria-label={`View internship certificate for ${exp.company}`}
-                      className="inline-flex items-center gap-2 rounded-lg border border-primary/50 px-3 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
-                    >
-                      <Award className="size-4" aria-hidden="true" /> View
-                      Certificate
-                    </button>
-                  )}
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setExpOpen(i)}
+                  data-exp-idx={i}
+                  aria-label={`View details for ${exp.role} at ${exp.company}`}
+                  className="mt-5 inline-flex items-center gap-2 rounded-lg border border-secondary/50 px-4 py-2 text-sm font-semibold text-secondary transition-colors hover:bg-secondary/10"
+                >
+                  View Details{" "}
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </button>
               </Reveal>
             ))}
           </ol>
@@ -577,41 +552,16 @@ function Portfolio() {
                 <p className="mt-1 text-sm text-muted-foreground">
                   {cert.issuer}
                 </p>
-                <div className="mt-5 flex flex-wrap items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setCertOpen(i)}
-                    data-cert-idx={i}
-                    aria-label={`View details for ${cert.name}`}
-                    className="inline-flex items-center gap-2 rounded-lg border border-secondary/50 px-4 py-2 text-sm font-semibold text-secondary transition-colors hover:bg-secondary/10"
-                  >
-                    View Details{" "}
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </button>
-                  {cert.image && (
-                    <button
-                      type="button"
-                      data-lightbox-cert={i}
-                      onClick={() =>
-                        setLightbox({
-                          images: [
-                            {
-                              src: cert.image as string,
-                              alt: `${cert.name} certificate from ${cert.issuer}`,
-                            },
-                          ],
-                          index: 0,
-                          title: `${cert.name} certificate`,
-                        })
-                      }
-                      aria-label={`View certificate image for ${cert.name}`}
-                      className="inline-flex items-center gap-2 rounded-lg border border-primary/50 px-3 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
-                    >
-                      <Award className="size-4" aria-hidden="true" /> View
-                      Certificate
-                    </button>
-                  )}
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setCertOpen(i)}
+                  data-cert-idx={i}
+                  aria-label={`View details for ${cert.name}`}
+                  className="mt-5 inline-flex items-center gap-2 rounded-lg border border-secondary/50 px-4 py-2 text-sm font-semibold text-secondary transition-colors hover:bg-secondary/10"
+                >
+                  View Details{" "}
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </button>
               </Reveal>
             ))}
           </div>
